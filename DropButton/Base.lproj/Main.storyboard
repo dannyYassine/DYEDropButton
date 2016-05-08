@@ -17,23 +17,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFS-qr-pWB" customClass="DYEDropButton" customModule="DropButton" customModuleProvider="target">
-                                <rect key="frame" x="212" y="271" width="176" height="58"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L1i-Lw-sof" customClass="DYEDropButton" customModule="DropButton" customModuleProvider="target">
+                                <rect key="frame" x="200" y="270" width="200" height="60"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="58" id="1ZN-eh-8kq"/>
-                                    <constraint firstAttribute="width" constant="176" id="box-hb-ba2"/>
+                                    <constraint firstAttribute="height" constant="60" id="7ro-zD-2E8"/>
+                                    <constraint firstAttribute="width" constant="200" id="wVO-WA-Exp"/>
                                 </constraints>
-                                <state key="normal" title="Press me"/>
-                            </button>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YMP-6D-B7Z" customClass="DYEDropButton" customModule="DropButton" customModuleProvider="target">
+                                <rect key="frame" x="200" y="385" width="200" height="60"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="7sa-2f-4L6"/>
+                                    <constraint firstAttribute="height" constant="60" id="q3A-FS-Ij5"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="REC-ao-CnS" customClass="DYEDropButton" customModule="DropButton" customModuleProvider="target">
+                                <rect key="frame" x="200" y="155" width="200" height="60"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="KIL-bW-DOg"/>
+                                    <constraint firstAttribute="width" constant="200" id="T2D-De-f2X"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.92674929101221637" green="0.92674929101221637" blue="0.92674929101221637" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="JFS-qr-pWB" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ACb-uN-5oV"/>
-                            <constraint firstItem="JFS-qr-pWB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Szd-B8-mQG"/>
+                            <constraint firstItem="YMP-6D-B7Z" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="094-1f-DZY"/>
+                            <constraint firstItem="L1i-Lw-sof" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="QvD-Dg-md9"/>
+                            <constraint firstItem="YMP-6D-B7Z" firstAttribute="top" secondItem="L1i-Lw-sof" secondAttribute="bottom" constant="55" id="Wdh-fd-FNq"/>
+                            <constraint firstItem="L1i-Lw-sof" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dWm-0H-fUn"/>
+                            <constraint firstItem="REC-ao-CnS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fa8-Z4-T5B"/>
+                            <constraint firstItem="L1i-Lw-sof" firstAttribute="top" secondItem="REC-ao-CnS" secondAttribute="bottom" constant="55" id="ihW-9W-3Fj"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="mainButton" destination="JFS-qr-pWB" id="z6U-6w-nIi"/>
+                        <outlet property="bottomButton" destination="YMP-6D-B7Z" id="qBx-R1-Bcl"/>
+                        <outlet property="mainButton" destination="L1i-Lw-sof" id="hQ3-Yf-HmL"/>
+                        <outlet property="topButton" destination="REC-ao-CnS" id="Z8O-Qe-iGs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -23,9 +23,20 @@ class DYEDropButton: UIView {
         }
     }
     
-    override var backgroundColor: UIColor? {
+    var color: UIColor? {
         set {
             self.button.backgroundColor = newValue
+        }
+        get {
+            return self.button.backgroundColor
+        }
+    }
+    
+    override var backgroundColor: UIColor? {
+        set {
+            if self.button != nil {
+                self.button.backgroundColor = newValue
+            }
         }
         get {
             return self.backgroundColor
@@ -78,6 +89,9 @@ class DYEDropButton: UIView {
         
         self.initViews()
         self.initActions()
+        
+        self.backgroundColor = UIColor.whiteColor()
+        self.shadowColor = UIColor.whiteColor()
         
     }
     
