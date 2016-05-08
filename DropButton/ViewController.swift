@@ -10,9 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var mainButton: DYEDropButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.mainButton.backgroundColor = UIColor.orangeColor()
+        self.mainButton.shadowColor = UIColor.orangeColor()
+        
+        self.mainButton.layer.cornerRadius = 3.0
+        self.mainButton.layer.masksToBounds = true
+        
     }
 
     override func didReceiveMemoryWarning() {
