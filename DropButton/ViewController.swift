@@ -19,8 +19,6 @@ class ViewController: UIViewController {
         self.mainButton.shadowColor = UIColor.orangeColor()
         
         self.mainButton.layer.cornerRadius = 3.0
-        self.mainButton.layer.masksToBounds = true
-        
     }
 
     override func didReceiveMemoryWarning() {
