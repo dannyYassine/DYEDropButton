@@ -51,9 +51,10 @@ class ViewController: UIViewController {
         
         let location = sender.locationInView(self.view)
         let center = sender.locationInView(self.bottomButton)
-                
+        
         if sender.state == .Began {
             self.bottomButton.layer.anchorPoint = CGPoint(x: center.x / self.bottomButton.bounds.width, y: center.y / self.bottomButton.bounds.height)
+            self.bottomButton.center = location
         } else if sender.state == .Changed {
             self.bottomButton.center = location
         } else if sender.state == .Ended {
