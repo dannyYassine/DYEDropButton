@@ -1,7 +1,7 @@
 # DYEDropButton
 
-*[Normal Mode](#normal---simple-press-and-release)
-*[Inverse Mode](#inverse-mode---button-highlighted-when-pressed)
+* [Normal Mode](#normal---simple-press-and-release)
+* [Inverse Mode](#inverse-mode---button-highlighted-when-pressed)
 
 ## Normal - Simple press and release
 
