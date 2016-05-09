@@ -1,5 +1,7 @@
 # DYEDropButton
 
+[Normal Mode](#normal---simple-press-and-release)
+
 ## Normal - Simple press and release
 
 ![](https://github.com/dannyYassine/DYEDropButton/blob/master/diffusedButton.gif)
