@@ -1,5 +1,7 @@
 # DYEDropButton
 
+First draft of the inspired Invision Shadow diffused button.
+
 * [Normal Mode](#normal---simple-press-and-release)
 * [Inverse Mode](#inverse-mode---button-highlighted-when-pressed)
 
