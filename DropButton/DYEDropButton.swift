@@ -32,6 +32,18 @@ class DYEDropButton: UIView {
         }
     }
     
+    var inverse: Bool {
+        didSet {
+            if oldValue == true {
+                self.backView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+                self.middleView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+            } else {
+                self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+                self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+            }
+        }
+    }
+    
     override var backgroundColor: UIColor? {
         set {
             if self.button != nil {
@@ -74,11 +86,13 @@ class DYEDropButton: UIView {
     }
     
     override init(frame: CGRect) {
+        self.inverse = false
         super.init(frame: frame)
         self.commonInit()
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.inverse = false
         super.init(coder: aDecoder)
         self.commonInit()
     }
@@ -93,6 +107,10 @@ class DYEDropButton: UIView {
         self.backgroundColor = UIColor.whiteColor()
         self.shadowColor = UIColor.whiteColor()
         
+        if inverse {
+            self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+            self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+        }
     }
     
     private func initViews() {
@@ -108,6 +126,7 @@ class DYEDropButton: UIView {
     
     private func initActions() {
         self.button.addTarget(self, action: #selector(didPressOnButton(_:)), forControlEvents: .TouchUpInside)
+        self.button.addTarget(self, action: #selector(didPressOnButton(_:)), forControlEvents: .TouchUpOutside)
         self.button.addTarget(self, action: #selector(self.pressOnButton(_:)), forControlEvents: .TouchDown)
     }
     
@@ -122,8 +141,13 @@ class DYEDropButton: UIView {
     private func showShadow() {
         UIView.animateWithDuration(0.25, animations: {
            
-            self.backView.frame.insetInPlace(dx: 0.0, dy: -10.0)
-            self.middleView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+            if self.inverse {
+                self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+                self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+            } else {
+                self.backView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+                self.middleView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+            }
             
         }) { (done) in
             
@@ -133,9 +157,14 @@ class DYEDropButton: UIView {
     private func hideShadow() {
         UIView.animateWithDuration(0.25, animations: {
             
-            self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
-            self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
-            
+            if self.inverse {
+                self.backView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+                self.middleView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+            } else {
+                self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+                self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+            }
+           
             }) { (done) in
                 
         }
