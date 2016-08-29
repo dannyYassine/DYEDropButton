@@ -59,6 +59,7 @@ class DYEDropButton: UIView {
         didSet {
             middleView.clipsToBounds = false
             middleView.backgroundColor = UIColor.blackColor()
+            middleView.layer.cornerRadius = super.layer.cornerRadius
             middleView.layer.shadowColor = UIColor.blackColor().CGColor
             middleView.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
             middleView.layer.shadowRadius = 10.0
@@ -68,6 +69,7 @@ class DYEDropButton: UIView {
     var backView: UIView! {
         didSet {
             backView.clipsToBounds = false
+            backView.layer.cornerRadius = super.layer.cornerRadius
             backView.backgroundColor = UIColor.cyanColor()
             backView.layer.shadowColor = UIColor.cyanColor().CGColor
             backView.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
