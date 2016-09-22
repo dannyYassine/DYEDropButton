@@ -1,175 +1,201 @@
 //
-//  DYEDropButton.swift
+//  DropButton.swift
 //  DropButton
 //
-//  Created by Danny Yassine on 2016-05-08.
+//  Created by Danny Yassine on 2016-05-30.
 //  Copyright © 2016 DannyYassine. All rights reserved.
 //
 
 import UIKit
 
-class DYEDropButton: UIView {
-
-    var shadowColor: UIColor? {
-        set {
-            self.backView.layer.shadowColor = newValue!.CGColor
-        }
-        get {
-            if let cgColor = self.backView.layer.shadowColor {
-                return UIColor(CGColor: cgColor)
-            } else {
-                return nil
-            }
-        }
-    }
+class DYEDropButton: UIButton {
     
-    var color: UIColor? {
-        set {
-            self.button.backgroundColor = newValue
-        }
-        get {
-            return self.button.backgroundColor
-        }
-    }
-    
-    var inverse: Bool {
-        didSet {
-            if oldValue == true {
-                self.backView.frame.insetInPlace(dx: 0.0, dy: -10.0)
-                self.middleView.frame.insetInPlace(dx: 0.0, dy: -10.0)
-            } else {
-                self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
-                self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
-            }
-        }
-    }
-    
-    override var backgroundColor: UIColor? {
-        set {
-            if self.button != nil {
-                self.button.backgroundColor = newValue
-            }
-        }
-        get {
-            return self.backgroundColor
-        }
-    }
-    
-    var middleView: UIView! {
+    fileprivate var middleView: UIView! {
         didSet {
             middleView.clipsToBounds = false
-            middleView.backgroundColor = UIColor.blackColor()
+            middleView.backgroundColor = UIColor.black
             middleView.layer.cornerRadius = super.layer.cornerRadius
-            middleView.layer.shadowColor = UIColor.blackColor().CGColor
-            middleView.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-            middleView.layer.shadowRadius = 10.0
+            middleView.layer.shadowColor = UIColor.black.cgColor
+            middleView.layer.shadowOffset = CGSize(width: 0.0, height: 12.0)
+            middleView.layer.shadowRadius = 7.5
             middleView.layer.shadowOpacity = 0.4
         }
     }
-    var backView: UIView! {
+    fileprivate var backView: UIView! {
         didSet {
             backView.clipsToBounds = false
+            backView.backgroundColor = self.shadowColor
             backView.layer.cornerRadius = super.layer.cornerRadius
-            backView.backgroundColor = UIColor.cyanColor()
-            backView.layer.shadowColor = UIColor.cyanColor().CGColor
-            backView.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-            backView.layer.shadowRadius = 10.0
+            backView.layer.shadowColor = self.shadowColor.cgColor
+            backView.layer.shadowOffset = CGSize(width: 0.0, height: 12.0)
+            backView.layer.shadowRadius = 5
             backView.layer.shadowOpacity = 0.8
         }
     }
-    var button: UIButton! {
+    
+    internal var inverse: Bool! {
         didSet {
-            
+            if self.inverse == true {
+                if self.backView != nil {
+                   self.backView.frame = self.backView.frame.insetBy(dx: 0.0, dy: -10.0)
+                }
+                if self.middleView != nil {
+                    self.middleView.frame = self.middleView.frame.insetBy(dx: 0.0, dy: -10.0)
+                }
+            } else {
+                if self.backView != nil {
+                    self.backView.frame = self.backView.frame.insetBy(dx: 0.0, dy: 10.0)
+                }
+                if self.middleView != nil {
+                    self.middleView.frame = self.middleView.frame.insetBy(dx: 0.0, dy: 10.0)
+                }
+            }
         }
     }
     
-    var side_padding: CGFloat {
-        return self.bounds.width * 0.1
+    internal var shadowColor: UIColor! {
+        didSet {
+            if let backView = self.backView {
+                backView.backgroundColor = self.shadowColor
+                backView.layer.shadowColor = self.shadowColor!.cgColor
+            }
+        }
     }
     
+    fileprivate var side_padding: CGFloat {
+        return self.bounds.width * 0.05
+    }
+    
+    fileprivate var isShadowHidden: Bool!
+    var initiallyhideShadow: Bool = false
+    
+    //MARK: - Initializers
+    
     override init(frame: CGRect) {
-        self.inverse = false
         super.init(frame: frame)
         self.commonInit()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.inverse = false
         super.init(coder: aDecoder)
         self.commonInit()
     }
     
-    func commonInit() {
+    fileprivate func commonInit() {
+        self.inverse = false
+        self.shadowColor = UIColor.white
         
         self.clipsToBounds = false
         
-        self.initViews()
         self.initActions()
         
-        self.backgroundColor = UIColor.whiteColor()
-        self.shadowColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
+        self.shadowColor = UIColor.white
+        self.isShadowHidden = false
+    }
+    
+    fileprivate func initActions() {
+        self.addTarget(self, action: #selector(didPressOnButton(_:)), for: .touchUpInside)
+        self.addTarget(self, action: #selector(didPressOffButton(_:)), for: .touchUpOutside)
+        self.addTarget(self, action: #selector(pressOnButton(_:)), for: .touchDown)
+        self.addTarget(self, action: #selector(pressOnButton(_:)), for: .touchDragEnter)
+        self.addTarget(self, action: #selector(touchCancel(_:)), for: .touchDragExit)
+    }
+    
+    //MARK: - Draw Shadows
+
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
-        if inverse {
-            self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
-            self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+        if self.backView == nil && self.middleView == nil {
+            self.drawShadowViews()
+        }
+        
+    }
+    
+    fileprivate func drawShadowViews() {
+        
+        self.middleView = UIView(frame: CGRect(x: self.frame.origin.x + self.side_padding, y: self.frame.origin.y + self.bounds.height / 2.0 - 10.0, width: self.bounds.width - (2 * self.side_padding), height: self.bounds.height / 2.0))
+        self.backView = UIView(frame: CGRect(x: self.frame.origin.x + self.side_padding, y: self.frame.origin.y + self.bounds.height / 2.0 - 10.0, width: self.bounds.width - (2 * self.side_padding), height: self.bounds.height / 2.0))
+        
+        if let _ = self.superview {
+            self.superview!.insertSubview(self.middleView, belowSubview: self)
+            self.superview!.insertSubview(self.backView, belowSubview: self)
+        }
+       
+        if self.initiallyhideShadow == true {
+            self.hideShadow()
         }
     }
     
-    private func initViews() {
-        self.button = UIButton(frame: self.bounds)
-        self.middleView = UIView(frame: CGRect(x: self.side_padding, y: self.bounds.height / 2.0, width: self.bounds.width - (2 * self.side_padding), height: self.bounds.height / 2.0))
-        self.backView = UIView(frame: CGRect(x: self.side_padding, y: self.bounds.height / 2.0, width: self.bounds.width - (2 * self.side_padding), height: self.bounds.height / 2.0))
-        
-        self.addSubview(self.button)
-        self.insertSubview(self.middleView, belowSubview: self.button)
-        self.insertSubview(self.backView, belowSubview: self.button)
-
+    //MARK: - Target Actions
+    
+    @objc fileprivate func didPressOnButton(_ sender: AnyObject) {
+        self.appearShadow()
     }
     
-    private func initActions() {
-        self.button.addTarget(self, action: #selector(didPressOnButton(_:)), forControlEvents: .TouchUpInside)
-        self.button.addTarget(self, action: #selector(didPressOnButton(_:)), forControlEvents: .TouchUpOutside)
-        self.button.addTarget(self, action: #selector(self.pressOnButton(_:)), forControlEvents: .TouchDown)
+    @objc fileprivate func didPressOffButton(_ sender: AnyObject) {
+        if self.isShadowHidden == true {
+            self.appearShadow()
+        }
     }
     
-    func didPressOnButton(sender: AnyObject) {
-        self.showShadow()
+    @objc fileprivate func touchCancel(_ sender: AnyObject) {
+        self.appearShadow()
     }
     
-    func pressOnButton(sender: AnyObject) {
-        self.hideShadow()
+    @objc fileprivate func pressOnButton(_ sender: AnyObject) {
+        self.disapearShadow()
     }
     
-    private func showShadow() {
-        UIView.animateWithDuration(0.25, animations: {
-           
-            if self.inverse {
-                self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
-                self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+    //MARK: - Public Shadow Animation
+    
+    internal func showShadow() {
+        if self.isShadowHidden == true {
+            self.appearShadow()
+        }
+    }
+    
+    internal func hideShadow() {
+        if self.isShadowHidden == false {
+            self.disapearShadow()
+        }
+    }
+    
+    //MARK: - Shadow Animation
+    
+    fileprivate func appearShadow() {
+        self.isShadowHidden = false
+        UIView.animate(withDuration: 0.25, animations: {
+            
+            if self.inverse == true {
+                self.backView.frame = self.backView.frame.insetBy(dx: 0.0, dy: 10.0)
+                self.middleView.frame = self.middleView.frame.insetBy(dx: 0.0, dy: 10.0)
             } else {
-                self.backView.frame.insetInPlace(dx: 0.0, dy: -10.0)
-                self.middleView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+                self.backView.frame = self.backView.frame.insetBy(dx: 0.0, dy: -10.0)
+                self.middleView.frame = self.middleView.frame.insetBy(dx: 0.0, dy: -10.0)
             }
             
-        }) { (done) in
+        }, completion: { (done) in
             
-        }
+        }) 
     }
     
-    private func hideShadow() {
-        UIView.animateWithDuration(0.25, animations: {
+    fileprivate func disapearShadow() {
+        self.isShadowHidden = true
+        UIView.animate(withDuration: 0.25, animations: {
             
-            if self.inverse {
-                self.backView.frame.insetInPlace(dx: 0.0, dy: -10.0)
-                self.middleView.frame.insetInPlace(dx: 0.0, dy: -10.0)
+            if self.inverse == true {
+                self.backView.frame = self.backView.frame.insetBy(dx: 0.0, dy: -10.0)
+                self.middleView.frame = self.middleView.frame.insetBy(dx: 0.0, dy: -10.0)
             } else {
-                self.backView.frame.insetInPlace(dx: 0.0, dy: 10.0)
-                self.middleView.frame.insetInPlace(dx: 0.0, dy: 10.0)
+                self.backView.frame = self.backView.frame.insetBy(dx: 0.0, dy: 10.0)
+                self.middleView.frame = self.middleView.frame.insetBy(dx: 0.0, dy: 10.0)
             }
-           
-            }) { (done) in
-                
-        }
+            
+        }, completion: { (done) in
+            
+        }) 
     }
-
+    
 }
